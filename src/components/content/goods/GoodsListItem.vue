@@ -32,7 +32,7 @@ props:{
     position: relative;
 
     width: 48%;
-    z-index: 5;
+   
   }
 
   .goods-item img {

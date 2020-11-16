@@ -1,25 +1,36 @@
 <template>
   <div id='home'>
 <nav-bar class='home-nav' ><div slot='center'> 购物街</div></nav-bar>
- <home-swiper :banners="banners" />
- <recommend-view :recommends='recommends' />
- <feature-vue />
- <tab-control class='tab-control' :titles='["流行","新款","精选"]'
-                          @tabClick='tabClick'
-              />
-  <goods-list :goods="goods[currentType].list"   />
  
+<scroll   class='content'  ref='scroll'  :probe-type="3"  @scroll="contentScroll" 
+          @scrollEnd='getHomeGoods("pop")'     
+               >
+
+  <home-swiper :banners="banners" />
+  <recommend-view :recommends='recommends' />
+  <feature-vue />
+  <tab-control class='tab-control' :titles='["流行","新款","精选"]'
+                                   @tabClick='tabClick'
+               />
+  <goods-list :goods="goods[currentType].list"   />
+
+</scroll>
+  <back-top @click.native='backClick' v-show='isShowBackTop'  />
+
   </div>
 </template>
 
 <script>
-import HomeSwiper    from './childComps/HomeSwiper'
-import RecommendView from './childComps/RecommendView'
-import FeatureVue    from './childComps/FeatureVue.vue'
+
+import HomeSwiper      from './childComps/HomeSwiper'
+import RecommendView   from './childComps/RecommendView'
+import FeatureVue      from './childComps/FeatureVue.vue'
 
 import NavBar          from 'components/common/navbar/NavBar'
 import TabControl      from 'components/content/tabControl/TabControl.vue'
 import GoodsList       from 'components/content/goods/GoodsList'
+import Scroll          from 'components/common/scroll/Scroll'
+import BackTop         from 'components/content/backTop/BackTop'
 
 
 import {getHomeMultidata ,
@@ -27,10 +38,11 @@ import {getHomeMultidata ,
           } from 'network/home'
 
 
+
 export default {
 name:'Home',
 components:{NavBar,HomeSwiper,RecommendView,
-FeatureVue,TabControl,GoodsList
+FeatureVue,TabControl,GoodsList,Scroll,BackTop
 
 
 },
@@ -46,7 +58,8 @@ data() {
       'new':{page:0,list:[]},
       'sell':{page:0,list:[]}
     },
-    currentType:'pop'
+    currentType:'pop',
+    isShowBackTop:false
   }
 },
 created() {
@@ -82,6 +95,7 @@ tabClick(index){
         getHomeMultidata().then(res=>{
     this.banners=res.data.banner.list;
     this.recommends=res.data.recommend.list;
+    console.log('aaa');
   })
   }
 
@@ -93,6 +107,14 @@ tabClick(index){
          this.goods[type].page+=1
   })
   }
+  ,backClick(){
+   this.$refs.scroll.scrollTo(0,0,500)
+  },
+  contentScroll(position){
+    this.isShowBackTop=(-position.y)>1000?true:false
+
+  }
+
 },
 }
 </script>
@@ -100,6 +122,7 @@ tabClick(index){
 <style scoped>
 #home{
   padding-top: 44px;
+  height: 100vh;
 }
 
 .home-nav{
@@ -116,5 +139,15 @@ tabClick(index){
   top: 43px;
   background-color: #fff;
     z-index: 9;
+}
+.content{
+  /* height: 475px; */
+  overflow: hidden;
+  /* margin-top: 44px; */
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 </style>
