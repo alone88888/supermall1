@@ -18,12 +18,20 @@ props:{
     probeType:{
         type:Number,
         default:0
+    },
+    pullUpLoad:{
+        type:Boolean,
+        default:false
     }
 }
 ,
 methods: {
     scrollTo(x,y,time=300){
-        this.scroll.scrollTo(x,y,time=300)
+     this.scroll && this.scroll.scrollTo &&  this.scroll.scrollTo(x,y,time=300)
+    }
+    ,refresh(){
+        console.log('-------');
+      this.scroll &&  this.scroll.scrollTo && this.scroll.refresh()
     }
 },
 data() {
@@ -36,7 +44,7 @@ mounted() {
        click:true,
        mouseWheel:true,
         probeType:this.probeType,
-   pullUpLoad:true,
+   pullUpLoad:this.pullUpLoad,
    })
 
     this.scroll.on('scroll',position=>{
@@ -48,7 +56,7 @@ mounted() {
 //    this.scroll.scrollTo(0,0)
 
 this.$emit('scrollEnd')
-    this.scroll.finishPullUp()
+    
   })
 
 

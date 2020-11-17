@@ -1,6 +1,6 @@
 <template>
   <div class='goods-item'>
-      <img :src="goodsItem.show.img" alt="">
+      <img :src="goodsItem.show.img" alt="" @load="imageLoad" >
       <div class='goods-info'>
           <p>
               {{goodsItem.title}}
@@ -22,7 +22,13 @@ props:{
             return {}
         }
     }
-}
+},
+methods: {
+  imageLoad(){
+  //  this.$refs.scroll.scroll.refresh()
+  this.$bus.$emit('itemImageLoad')
+  }
+},
 }
 </script>
 
