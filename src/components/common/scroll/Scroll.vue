@@ -30,8 +30,10 @@ methods: {
      this.scroll && this.scroll.scrollTo &&  this.scroll.scrollTo(x,y,time=300)
     }
     ,refresh(){
-        console.log('-------');
       this.scroll &&  this.scroll.scrollTo && this.scroll.refresh()
+    },
+    getScrollY(){
+        return this.scroll
     }
 },
 data() {
@@ -41,10 +43,10 @@ data() {
     },
 mounted() {
     this.scroll=new BScroll(this.$refs.wrapper,{
-       click:true,
-       mouseWheel:true,
+        click:true,
+        mouseWheel:true,
         probeType:this.probeType,
-   pullUpLoad:this.pullUpLoad,
+        pullUpLoad:this.pullUpLoad,
    })
 
     this.scroll.on('scroll',position=>{

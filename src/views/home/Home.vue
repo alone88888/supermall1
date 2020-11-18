@@ -69,7 +69,8 @@ data() {
     currentType:'pop',
     isShowBackTop:false,
     tabOffsetTop:0,
-    isTabFixed:false
+    isTabFixed:false,
+    saveY:0
   }
 },
 created() {
@@ -87,6 +88,7 @@ created() {
       
 },
 mounted() {
+  
  const refresh=this.debounce(this.$refs.scroll.refresh,500)
 
 
@@ -168,6 +170,14 @@ tabClick(index){
     this.isTabFixed=(-position.y)>this.tabOffsetTop
   }
 
+},
+activated() {
+  this.$refs.scroll.scrollTo(0,this.saveY,0)
+  this.$refs.scroll.refresh()
+},
+deactivated() {
+ 
+  this.saveY=this.$refs.scroll.getScrollY().absStartY
 },
 }
 </script>
