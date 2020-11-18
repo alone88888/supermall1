@@ -1,48 +1,47 @@
 <template>
-    <div  id='detail'>
+  <div id='detail'>
     <detail-nav-bar></detail-nav-bar>
-    <detail-swiper  :top-images='topImages'></detail-swiper>
-    </div>
+    <detail-swiper :top-images='topImages'></detail-swiper>
+  </div>
 </template>
 
 <script>
 
 
 
-import   DetailNavBar from './childComps/DetailNavBar'
-import   DetailSwiper from './childComps/DetailSwiper'
+import DetailNavBar from './childComps/DetailNavBar'
+import DetailSwiper from './childComps/DetailSwiper'
 
 
-import {getDetail} from 'network/detail'
+import { getDetail } from 'network/detail'
 export default {
-        name:'Detail'
-       
-        ,
-        components:{
-DetailNavBar,DetailSwiper
-        },
-        data() {
-            return {
-                iid:null,
-                topImages:null
-            }
-        }
-        ,created() {
-              this.iid=this.$route.params.iid
+  name: 'Detail'
 
-            //根据iid请求详情数据
-            getDetail(this.iid).then(res=>{
-                console.log(res);
-                // 1.获取顶部的图片轮播数据
-    this.topImages=res.result.itemInfo.topImages
-            })
-        },
-        activated() {
-            
-        },
+  ,
+  components: {
+    DetailNavBar, DetailSwiper
+  },
+  data () {
+    return {
+      iid: null,
+      topImages: null
+    }
+  }
+  , created () {
+    this.iid = this.$route.params.iid
+
+    //根据iid请求详情数据
+    getDetail(this.iid).then(res => {
+      console.log(res);
+      // 1.获取顶部的图片轮播数据
+      this.topImages = res.result.itemInfo.topImages
+    })
+  },
+  activated () {
+
+  },
 }
 </script>
 
 <style>
-
 </style>
