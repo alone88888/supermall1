@@ -14,10 +14,13 @@ function padLeftZero(str) {
 
 // 时间格式化
 export function formatDate(date, fmt) {
+  //获取年份
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
   }
 
+  //获取
+  //M+ ->正则表达式获取规则
   let o = {
     "M+": date.getMonth() + 1,
     "d+": date.getDate(),

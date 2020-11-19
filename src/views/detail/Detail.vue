@@ -12,6 +12,7 @@
 
       <detail-param-info :paramInfo='paramInfo'></detail-param-info>
       <detail-comment-info :commentInfo='commentInfo'></detail-comment-info>
+      <goods-list :goods='recomments'></goods-list>
     </scroll>
 
   </div>
@@ -30,17 +31,18 @@ import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
 
 
+
 import Scroll from 'components/common/scroll/Scroll'
+import GoodsList from 'components/content/goods/GoodsList'
 
-
-import { getDetail, Goods, Shop, GoodsParams } from 'network/detail'
+import { getDetail, Goods, Shop, GoodsParams, getRecommend } from 'network/detail'
 export default {
   name: 'Detail'
 
   ,
   components: {
     DetailNavBar, DetailSwiper, DetailBaseInfo, DetailShopInfo, Scroll, DetailGoodsInfo, DetailParamInfo
-    , DetailCommentInfo
+    , DetailCommentInfo, GoodsList
 
   },
   data () {
@@ -51,7 +53,8 @@ export default {
       shop: {},
       detailInfo: {},
       paramInfo: {},
-      commentInfo: {}
+      commentInfo: {},
+      recomments: []
     }
   }
   , created () {
@@ -75,10 +78,16 @@ export default {
       //获取参数额信息
       this.paramInfo = new GoodsParams(data.itemParams.info, data.itemParams.rule)
 
-      //获取评论嘻嘻  
+      //获取评论信息 
       if (data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0]
       }
+
+
+      //请求推荐数据
+      getRecommend().then(res => {
+        this.recomments = res.data.list
+      })
     })
 
 
