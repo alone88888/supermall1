@@ -184,8 +184,7 @@ export default {
     this.$refs.scroll.refresh()
   },
   deactivated () {
-
-    this.saveY = this.$refs.scroll.getScrollY().absStartY
+    this.saveY = this.$refs.scroll.getScrollY()
   },
 }
 </script>
