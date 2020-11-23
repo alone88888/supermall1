@@ -29,6 +29,7 @@ export default {
   methods: {
     imageLoad () {
       //  this.$refs.scroll.scroll.refresh()
+
       this.$bus.$emit('itemImageLoad')
     }
     ,
@@ -50,6 +51,7 @@ export default {
   position: relative;
 
   width: 48%;
+  z-index: 9;
 }
 
 .goods-item img {

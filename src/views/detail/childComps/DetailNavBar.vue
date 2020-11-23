@@ -10,7 +10,7 @@
       <div slot='center'
            class='title'>
         <div v-for="(item,index) in titles"
-             @click='currentIndex=index'
+             @click='titleClick(index)'
              class='title-item'
              :class='{active:index==currentIndex}'
              :key='index'>
@@ -40,6 +40,10 @@ export default {
   methods: {
     backClick () {
       this.$router.go(-1)
+    },
+    titleClick (index) {
+      this.currentIndex = index
+      this.$emit('titleClick', index)
     }
   },
 }

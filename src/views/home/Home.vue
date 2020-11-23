@@ -40,11 +40,14 @@ import HomeSwiper from './childComps/HomeSwiper'
 import RecommendView from './childComps/RecommendView'
 import FeatureVue from './childComps/FeatureVue.vue'
 
+import { debounce } from 'common/utils'
+
 import NavBar from 'components/common/navbar/NavBar'
 import TabControl from 'components/content/tabControl/TabControl.vue'
 import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
-import BackTop from 'components/content/backTop/BackTop'
+
+import { backTopMixin } from 'common/mixin'
 
 
 import {
@@ -52,18 +55,18 @@ import {
   getHomeGoods
 } from 'network/home'
 
-
+import { itemListenerMixin } from 'common/mixin'
 
 export default {
   name: 'Home',
   components: {
     NavBar, HomeSwiper, RecommendView,
-    FeatureVue, TabControl, GoodsList, Scroll, BackTop
+    FeatureVue, TabControl, GoodsList, Scroll, backTopMixin
 
 
   },
-
-
+  mixins: [itemListenerMixin, backTopMixin]
+  ,
   data () {
 
     return {
@@ -75,9 +78,9 @@ export default {
         'sell': { page: 0, list: [] }
       },
       currentType: 'pop',
-      isShowBackTop: false,
+
       tabOffsetTop: 0,
-      isTabFixed: false,
+
       saveY: 0
     }
   },
@@ -96,18 +99,23 @@ export default {
 
   },
   mounted () {
-
-    const refresh = this.debounce(this.$refs.scroll.refresh, 500)
-
-
-    this.$bus.$on('itemImageLoad', () => {
+    //对我们监听的事件进行保存
+    this.itemImgListener = () => {
 
       refresh()
       //  this.$refs.scroll.refresh()
-    })
+    }
+    const refresh = debounce(this.$refs.scroll.refresh, 500)
+
+
+    this.$bus.$on('itemImageLoad', this.itemImgListener)
 
     //.获取tabcontrol de offsettop
     // 或有的组件都有一个属性叫 $el 用于获取组件中的元素的
+
+
+
+
 
   },
   methods: {
@@ -168,9 +176,7 @@ export default {
         this.$refs.scroll.scroll.finishPullUp()
       })
     }
-    , backClick () {
-      this.$refs.scroll.scrollTo(0, 0, 500)
-    },
+    ,
     contentScroll (position) {
       //1.判断backtop是否显示
       this.isShowBackTop = (-position.y) > 1000 ? true : false
@@ -184,7 +190,10 @@ export default {
     this.$refs.scroll.refresh()
   },
   deactivated () {
+    // 保存Y值
     this.saveY = this.$refs.scroll.getScrollY()
+    // 取消全局事件监听
+    this.$bus.$off('itemImageLoad', this.itemImgListener)
   },
 }
 </script>
