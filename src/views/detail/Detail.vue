@@ -194,14 +194,19 @@ export default {
         // }
       }
 
-    }
-    ,
-    contentScroll (position) {
+
       //1.判断backtop是否显示
       this.isShowBackTop = (-position.y) > 1000 ? true : false
       //2.决定tabcontrol是否吸顶  position：fixed
       this.isTabFixed = (-position.y) > this.tabOffsetTop
     }
+    // ,
+    // contentScroll1 (position) {
+    //   //1.判断backtop是否显示
+    //   this.isShowBackTop = (-position.y) > 1000 ? true : false
+    //   //2.决定tabcontrol是否吸顶  position：fixed
+    //   this.isTabFixed = (-position.y) > this.tabOffsetTop
+    // }
     , addToCart () {
 
       //1.获取在购物车需要展示的信息
@@ -209,12 +214,13 @@ export default {
       product.image = this.topImages[0]
       product.title = this.goods.title
       product.desc = this.goods.desc
-      product.price = this.goods.lowNowPrice
+      product.price = this.goods.realPrice
       product.iid = this.iid
 
       // 商品添加到购物车里面
 
-
+      // this.$store.commit('addCart', product)
+      this.$store.dispatch('addCart', product)
     }
   },
   mounted () {
